@@ -42,9 +42,9 @@ class Bing(AsyncGeneratorProvider):
         messages: Messages,
         proxy: str = None,
         cookies: dict = None,
-        tone: str = Tones.creative,
+        tone: str = Tones.precise,
         image: str = None,
-        web_search: bool = False,
+        web_search: bool = True,
         **kwargs
     ) -> AsyncResult:
         if len(messages) < 2:
@@ -61,7 +61,9 @@ class Bing(AsyncGeneratorProvider):
                 if key not in cookies:
                     cookies[key] = value
 
-        gpt4_turbo = True if model.startswith("gpt-4-turbo") else False
+        gpt4_turbo = True
+        web_search = True
+        tone = Tones.precise
 
         return stream_generate(prompt, tone, image, context, proxy, cookies, web_search, gpt4_turbo)
 

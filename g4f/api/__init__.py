@@ -91,6 +91,13 @@ class Api:
             provider = item_data.get('provider', '').replace('g4f.Provider.', '')
             provider = provider if provider and provider != "Auto" else None
 
+            if model =='phind':
+                provider = g4f.Provider.Phind
+                model = "gpt-3.5-turbo"
+            elif model == 'bing':
+                provider = g4f.Provider.Bing
+                model = "gpt-4"
+
             try:
                 response = g4f.ChatCompletion.create(
                     model=model,
