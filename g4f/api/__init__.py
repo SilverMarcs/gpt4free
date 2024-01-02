@@ -77,10 +77,7 @@ class Api:
             }
 
             # item contains byte keys, and dict.get suppresses error
-            item_data.update({
-                key.decode('utf-8') if isinstance(key, bytes) else key: str(value)
-                for key, value in (item or {}).items()
-            })
+            item_data.update({key.decode('utf-8') if isinstance(key, bytes) else key: str(value) for key, value in (item or {}).items()})
             # messages is str, need dict
             if isinstance(item_data.get('messages'), str):
                 item_data['messages'] = ast.literal_eval(item_data.get('messages'))
@@ -88,13 +85,12 @@ class Api:
             model = item_data.get('model')
             stream = True if item_data.get("stream") == "True" else False
             messages = item_data.get('messages')
-            provider = item_data.get('provider', '').replace('g4f.Provider.', '')
-            provider = provider if provider and provider != "Auto" else None
+            # temperature = item_data.get('temperature')
 
             if model =='phind':
                 provider = g4f.Provider.Phind
-                model = "gpt-3.5-turbo"
-            elif model == 'bing':
+                model = "gpt-4"
+            else:
                 provider = g4f.Provider.Bing
                 model = "gpt-4"
 
@@ -103,7 +99,7 @@ class Api:
                     model=model,
                     stream=stream,
                     messages=messages,
-                    provider = provider,
+                    provider=provider,
                     ignored=self.list_ignored_providers
                 )
             except Exception as e:

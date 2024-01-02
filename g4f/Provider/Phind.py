@@ -51,7 +51,7 @@ class Phind(AsyncGeneratorProvider):
                     "language": "en-US",
                     "detailed": True,
                     "anonUserId": "",
-                    "answerModel": "GPT-4" if model.startswith("gpt-4") else "Phind Model",
+                    "answerModel": "Phind Model",
                     "creativeMode": creative_mode,
                     "customLinks": []
                 },
@@ -62,6 +62,7 @@ class Phind(AsyncGeneratorProvider):
             async with session.post(f"{cls.url}/api/infer/followup/answer", headers=headers, json=data) as response:
                 new_line = False
                 async for line in response.iter_lines():
+                    print(line)
                     if line.startswith(b"data: "):
                         chunk = line[6:]
                         if chunk.startswith(b"<PHIND_METADATA>") or chunk.startswith(b"<PHIND_INDICATOR>"):
